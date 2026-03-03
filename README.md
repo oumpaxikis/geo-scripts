@@ -1,4 +1,4 @@
-# GeoGuessr Exporter
+# Download CSV of Challenge results
 
 A TamperMonkey userscript that exports GeoGuessr challenge results to a CSV file.
 
@@ -7,7 +7,7 @@ A TamperMonkey userscript that exports GeoGuessr challenge results to a CSV file
 1. Install the [TamperMonkey](https://www.tampermonkey.net/) browser extension if you haven't already
 2. Click the link below to install the script:
 
-👉 **[Install GeoGuessr Exporter](https://raw.githubusercontent.com/oumpaxikis/geo-scripts/main/download-csv-challenge-results.js)**
+👉 **[Install GeoGuessr Exporter](Rhttps://github.com/oumpaxikis/geo-scripts/blob/main/download-csv-challenge-results.js?raw=true)**
 
 TamperMonkey will open and ask you to confirm the installation. Click **Install**.
 
