@@ -8,8 +8,8 @@
 // @icon         https://www.google.com/s2/favicons?domain=geoguessr.com
 // @copyright    2026, blitve
 // @license      CC BY-NC-SA
-// @downloadURL  https://github.com/oumpaxikis/geo-scripts/raw/refs/heads/main/download-csv-challenge-results.js
-// @updateURL    https://github.com/oumpaxikis/geo-scripts/raw/refs/heads/main/download-csv-challenge-results.js
+// @downloadURL  https://github.com/oumpaxikis/geo-scripts/raw/refs/heads/main/download-csv-challenge-results.user.js
+// @updateURL    https://github.com/oumpaxikis/geo-scripts/raw/refs/heads/main/download-csv-challenge-results.user.js
 // ==/UserScript==
 
 let button = null;
