@@ -33,7 +33,7 @@ const MAP_MAKING_API_KEY = "a23929df-2bb3-4b93-b230-cddd4b912ae1";
 /* ##### DON'T MODIFY ANYTHING BELOW HERE UNLESS YOU KNOW WHAT YOU ARE DOING ##### */
 /* ############################################################################### */
 
-if(window.frameElement) return;
+if (window.frameElement) return;
 
 const script = document.createElement('script');
 script.textContent = `
@@ -55,8 +55,8 @@ document.documentElement.appendChild(script);
 script.remove();
 
 // Event Framework
-(function() {
-    var __awaiter=this&&this.__awaiter||function(c,R,t,i){function o(n){return n instanceof t?n:new t(function(s){s(n)})}return new(t||(t=Promise))(function(n,s){function l(r){try{u(i.next(r))}catch(a){s(a)}}function v(r){try{u(i.throw(r))}catch(a){s(a)}}function u(r){r.done?n(r.value):o(r.value).then(l,v)}u((i=i.apply(c,R||[])).next())})};const THE_WINDOW=unsafeWindow||window;(function(){class c{constructor(){this.events=new EventTarget,this.state=this.defaultState(),this.loadState(),this.initFetchEvents(),this.overrideFetch(),this.init(),THE_WINDOW.addEventListener("load",()=>{var t,i,o;if(location.pathname.startsWith("/challenge/")){const n=(o=(i=(t=THE_WINDOW?.__NEXT_DATA__)===null||t===void 0?void 0:t.props)===null||i===void 0?void 0:i.pageProps)===null||o===void 0?void 0:o.gameSnapshot;if(!n||!n.round)return;THE_WINDOW.GEFFetchEvents.dispatchEvent(new CustomEvent("received_data",{detail:n}))}}),THE_WINDOW.GEFFetchEvents.addEventListener("received_data",t=>{this.parseData(t.detail)})}initFetchEvents(){THE_WINDOW.GEFFetchEvents===void 0&&(THE_WINDOW.GEFFetchEvents=new EventTarget)}overrideFetch(){if(THE_WINDOW.fetch.isGEFFetch)return;const t=THE_WINDOW.fetch;THE_WINDOW.fetch=function(){return function(...i){var o;return __awaiter(this,void 0,void 0,function*(){const n=i[0].toString();if(n.match(/geoguessr\.com\/api\/v3\/games$/)&&((o=i[1])===null||o===void 0?void 0:o.method)==="POST"){const s=yield t.apply(THE_WINDOW,i),l=yield s.clone().json();return l.round&&THE_WINDOW.GEFFetchEvents.dispatchEvent(new CustomEvent("received_data",{detail:l})),s}if(/geoguessr.com\/api\/v3\/(games|challenges)\//.test(n)&&n.indexOf("daily-challenge")===-1){const s=yield t.apply(THE_WINDOW,i),l=yield s.clone().json();return l.round&&THE_WINDOW.GEFFetchEvents.dispatchEvent(new CustomEvent("received_data",{detail:l})),s}return t.apply(THE_WINDOW,i)})}}(),THE_WINDOW.fetch.isGEFFetch=!0}init(){return __awaiter(this,void 0,void 0,function*(){return this.loadedPromise||(this.loadedPromise=Promise.resolve(this)),yield this.loadedPromise})}defaultState(){return{current_game_id:"",is_challenge_link:!1,current_round:0,round_in_progress:!1,game_in_progress:!0,total_score:{amount:0,unit:"points",percentage:0},total_distance:{meters:{amount:0,unit:"km"},miles:{amount:0,unit:"miles"}},total_time:0,rounds:[],map:{id:"",name:""}}}parseData(t){const i=t.player.guesses.length==t.round,o=t.round!==this.state.current_round||t.token!==this.state.current_game_id;i?this.stopRound(t):o&&this.startRound(t)}loadState(){let t=window.localStorage.getItem("GeoGuessrEventFramework_STATE");if(!t)return;let i=JSON.parse(t);i&&(Object.assign(this.state,this.defaultState(),i),this.saveState())}saveState(){window.localStorage.setItem("GeoGuessrEventFramework_STATE",JSON.stringify(this.state))}hex2a(t){const i=t.toString();let o="";for(let n=0;n<i.length;n+=2)o+=String.fromCharCode(parseInt(i.substring(n,n+2),16));return o}startRound(t){this.state.current_round=t.round,this.state.round_in_progress=!0,this.state.game_in_progress=!0,this.state.current_game_id=t.token,this.state.is_challenge_link=t.type=="challenge",this.state.rounds=this.state.rounds.slice(0,t.round-1),t&&(this.state.map={id:t.map,name:t.mapName}),this.saveState(),this.state.current_round===1&&this.events.dispatchEvent(new CustomEvent("game_start",{detail:this.state})),this.events.dispatchEvent(new CustomEvent("round_start",{detail:this.state}))}stopRound(t){var i,o,n,s,l,v,u,r,a,h,m,_,p,f,g,E,F,w,y,S,G,k,T,C,D,x,I,N,O,b;if(this.state.round_in_progress=!1,t){const d=t.rounds[this.state.current_round-1],e=t.player.guesses[this.state.current_round-1];if(!d||!e)return;this.state.rounds[this.state.current_round-1]={location:{lat:d.lat,lng:d.lng,heading:d.heading,pitch:d.pitch,zoom:d.zoom,panoId:d.panoId?this.hex2a(d.panoId):void 0},player_guess:{lat:e.lat,lng:e.lng},score:{amount:parseFloat((i=e?.roundScore)===null||i===void 0?void 0:i.amount)||0,unit:((o=e?.roundScore)===null||o===void 0?void 0:o.unit)||"points",percentage:((n=e?.roundScore)===null||n===void 0?void 0:n.percentage)||0},distance:{meters:{amount:parseFloat((l=(s=e?.distance)===null||s===void 0?void 0:s.meters)===null||l===void 0?void 0:l.amount)||0,unit:((u=(v=e?.distance)===null||v===void 0?void 0:v.meters)===null||u===void 0?void 0:u.unit)||"km"},miles:{amount:parseFloat((a=(r=e?.distance)===null||r===void 0?void 0:r.miles)===null||a===void 0?void 0:a.amount)||0,unit:((m=(h=e?.distance)===null||h===void 0?void 0:h.miles)===null||m===void 0?void 0:m.unit)||"miles"}},time:e?.time},this.state.total_score={amount:parseFloat((p=(_=t?.player)===null||_===void 0?void 0:_.totalScore)===null||p===void 0?void 0:p.amount)||0,unit:((g=(f=t?.player)===null||f===void 0?void 0:f.totalScore)===null||g===void 0?void 0:g.unit)||"points",percentage:((F=(E=t?.player)===null||E===void 0?void 0:E.totalScore)===null||F===void 0?void 0:F.percentage)||0},this.state.total_distance={meters:{amount:parseFloat((S=(y=(w=t?.player)===null||w===void 0?void 0:w.totalDistance)===null||y===void 0?void 0:y.meters)===null||S===void 0?void 0:S.amount)||0,unit:((T=(k=(G=t?.player)===null||G===void 0?void 0:G.totalDistance)===null||k===void 0?void 0:k.meters)===null||T===void 0?void 0:T.unit)||"km"},miles:{amount:parseFloat((x=(D=(C=t?.player)===null||C===void 0?void 0:C.totalDistance)===null||D===void 0?void 0:D.miles)===null||x===void 0?void 0:x.amount)||0,unit:((O=(N=(I=t?.player)===null||I===void 0?void 0:I.totalDistance)===null||N===void 0?void 0:N.miles)===null||O===void 0?void 0:O.unit)||"miles"}},this.state.total_time=(b=t?.player)===null||b===void 0?void 0:b.totalTime,this.state.map={id:t.map,name:t.mapName}}this.saveState(),this.events.dispatchEvent(new CustomEvent("round_end",{detail:this.state})),this.state.current_round===5&&this.events.dispatchEvent(new CustomEvent("game_end",{detail:this.state}))}}THE_WINDOW.GeoGuessrEventFramework||(THE_WINDOW.GeoGuessrEventFramework=new c,console.log("GeoGuessr Event Framework initialised: https://github.com/miraclewhips/geoguessr-event-framework"))})();
+(function () {
+    var __awaiter = this && this.__awaiter || function (c, R, t, i) { function o(n) { return n instanceof t ? n : new t(function (s) { s(n) }) } return new (t || (t = Promise))(function (n, s) { function l(r) { try { u(i.next(r)) } catch (a) { s(a) } } function v(r) { try { u(i.throw(r)) } catch (a) { s(a) } } function u(r) { r.done ? n(r.value) : o(r.value).then(l, v) } u((i = i.apply(c, R || [])).next()) }) }; const THE_WINDOW = unsafeWindow || window; (function () { class c { constructor() { this.events = new EventTarget, this.state = this.defaultState(), this.loadState(), this.initFetchEvents(), this.overrideFetch(), this.init(), THE_WINDOW.addEventListener("load", () => { var t, i, o; if (location.pathname.startsWith("/challenge/")) { const n = (o = (i = (t = THE_WINDOW?.__NEXT_DATA__) === null || t === void 0 ? void 0 : t.props) === null || i === void 0 ? void 0 : i.pageProps) === null || o === void 0 ? void 0 : o.gameSnapshot; if (!n || !n.round) return; THE_WINDOW.GEFFetchEvents.dispatchEvent(new CustomEvent("received_data", { detail: n })) } }), THE_WINDOW.GEFFetchEvents.addEventListener("received_data", t => { this.parseData(t.detail) }) } initFetchEvents() { THE_WINDOW.GEFFetchEvents === void 0 && (THE_WINDOW.GEFFetchEvents = new EventTarget) } overrideFetch() { if (THE_WINDOW.fetch.isGEFFetch) return; const t = THE_WINDOW.fetch; THE_WINDOW.fetch = function () { return function (...i) { var o; return __awaiter(this, void 0, void 0, function* () { const n = i[0].toString(); if (n.match(/geoguessr\.com\/api\/v3\/games$/) && ((o = i[1]) === null || o === void 0 ? void 0 : o.method) === "POST") { const s = yield t.apply(THE_WINDOW, i), l = yield s.clone().json(); return l.round && THE_WINDOW.GEFFetchEvents.dispatchEvent(new CustomEvent("received_data", { detail: l })), s } if (/geoguessr.com\/api\/v3\/(games|challenges)\//.test(n) && n.indexOf("daily-challenge") === -1) { const s = yield t.apply(THE_WINDOW, i), l = yield s.clone().json(); return l.round && THE_WINDOW.GEFFetchEvents.dispatchEvent(new CustomEvent("received_data", { detail: l })), s } return t.apply(THE_WINDOW, i) }) } }(), THE_WINDOW.fetch.isGEFFetch = !0 } init() { return __awaiter(this, void 0, void 0, function* () { return this.loadedPromise || (this.loadedPromise = Promise.resolve(this)), yield this.loadedPromise }) } defaultState() { return { current_game_id: "", is_challenge_link: !1, current_round: 0, round_in_progress: !1, game_in_progress: !0, total_score: { amount: 0, unit: "points", percentage: 0 }, total_distance: { meters: { amount: 0, unit: "km" }, miles: { amount: 0, unit: "miles" } }, total_time: 0, rounds: [], map: { id: "", name: "" } } } parseData(t) { const i = t.player.guesses.length == t.round, o = t.round !== this.state.current_round || t.token !== this.state.current_game_id; i ? this.stopRound(t) : o && this.startRound(t) } loadState() { let t = window.localStorage.getItem("GeoGuessrEventFramework_STATE"); if (!t) return; let i = JSON.parse(t); i && (Object.assign(this.state, this.defaultState(), i), this.saveState()) } saveState() { window.localStorage.setItem("GeoGuessrEventFramework_STATE", JSON.stringify(this.state)) } hex2a(t) { const i = t.toString(); let o = ""; for (let n = 0; n < i.length; n += 2)o += String.fromCharCode(parseInt(i.substring(n, n + 2), 16)); return o } startRound(t) { this.state.current_round = t.round, this.state.round_in_progress = !0, this.state.game_in_progress = !0, this.state.current_game_id = t.token, this.state.is_challenge_link = t.type == "challenge", this.state.rounds = this.state.rounds.slice(0, t.round - 1), t && (this.state.map = { id: t.map, name: t.mapName }), this.saveState(), this.state.current_round === 1 && this.events.dispatchEvent(new CustomEvent("game_start", { detail: this.state })), this.events.dispatchEvent(new CustomEvent("round_start", { detail: this.state })) } stopRound(t) { var i, o, n, s, l, v, u, r, a, h, m, _, p, f, g, E, F, w, y, S, G, k, T, C, D, x, I, N, O, b; if (this.state.round_in_progress = !1, t) { const d = t.rounds[this.state.current_round - 1], e = t.player.guesses[this.state.current_round - 1]; if (!d || !e) return; this.state.rounds[this.state.current_round - 1] = { location: { lat: d.lat, lng: d.lng, heading: d.heading, pitch: d.pitch, zoom: d.zoom, panoId: d.panoId ? this.hex2a(d.panoId) : void 0 }, player_guess: { lat: e.lat, lng: e.lng }, score: { amount: parseFloat((i = e?.roundScore) === null || i === void 0 ? void 0 : i.amount) || 0, unit: ((o = e?.roundScore) === null || o === void 0 ? void 0 : o.unit) || "points", percentage: ((n = e?.roundScore) === null || n === void 0 ? void 0 : n.percentage) || 0 }, distance: { meters: { amount: parseFloat((l = (s = e?.distance) === null || s === void 0 ? void 0 : s.meters) === null || l === void 0 ? void 0 : l.amount) || 0, unit: ((u = (v = e?.distance) === null || v === void 0 ? void 0 : v.meters) === null || u === void 0 ? void 0 : u.unit) || "km" }, miles: { amount: parseFloat((a = (r = e?.distance) === null || r === void 0 ? void 0 : r.miles) === null || a === void 0 ? void 0 : a.amount) || 0, unit: ((m = (h = e?.distance) === null || h === void 0 ? void 0 : h.miles) === null || m === void 0 ? void 0 : m.unit) || "miles" } }, time: e?.time }, this.state.total_score = { amount: parseFloat((p = (_ = t?.player) === null || _ === void 0 ? void 0 : _.totalScore) === null || p === void 0 ? void 0 : p.amount) || 0, unit: ((g = (f = t?.player) === null || f === void 0 ? void 0 : f.totalScore) === null || g === void 0 ? void 0 : g.unit) || "points", percentage: ((F = (E = t?.player) === null || E === void 0 ? void 0 : E.totalScore) === null || F === void 0 ? void 0 : F.percentage) || 0 }, this.state.total_distance = { meters: { amount: parseFloat((S = (y = (w = t?.player) === null || w === void 0 ? void 0 : w.totalDistance) === null || y === void 0 ? void 0 : y.meters) === null || S === void 0 ? void 0 : S.amount) || 0, unit: ((T = (k = (G = t?.player) === null || G === void 0 ? void 0 : G.totalDistance) === null || k === void 0 ? void 0 : k.meters) === null || T === void 0 ? void 0 : T.unit) || "km" }, miles: { amount: parseFloat((x = (D = (C = t?.player) === null || C === void 0 ? void 0 : C.totalDistance) === null || D === void 0 ? void 0 : D.miles) === null || x === void 0 ? void 0 : x.amount) || 0, unit: ((O = (N = (I = t?.player) === null || I === void 0 ? void 0 : I.totalDistance) === null || N === void 0 ? void 0 : N.miles) === null || O === void 0 ? void 0 : O.unit) || "miles" } }, this.state.total_time = (b = t?.player) === null || b === void 0 ? void 0 : b.totalTime, this.state.map = { id: t.map, name: t.mapName } } this.saveState(), this.events.dispatchEvent(new CustomEvent("round_end", { detail: this.state })), this.state.current_round === 5 && this.events.dispatchEvent(new CustomEvent("game_end", { detail: this.state })) } } THE_WINDOW.GeoGuessrEventFramework || (THE_WINDOW.GeoGuessrEventFramework = new c, console.log("GeoGuessr Event Framework initialised: https://github.com/miraclewhips/geoguessr-event-framework")) })();
 })();
 
 const compassColors = {
@@ -387,7 +387,7 @@ aside[class^="game_controls___"] {
 
 function pointCompass() {
     const arrow = document.getElementById('mwgtm-compass-arrow');
-    if(!MWGTM_SV || !arrow) return;
+    if (!MWGTM_SV || !arrow) return;
 
     const heading = MWGTM_SV.getPov().heading;
     arrow.style.transform = `rotate(${-heading}deg)`;
@@ -453,10 +453,10 @@ function defaultState() {
 
 function loadState() {
     let data = window.localStorage.getItem('mwgtm_state');
-    if(!data) return;
+    if (!data) return;
 
     let dataJson = JSON.parse(data);
-    if(!dataJson) return;
+    if (!dataJson) return;
 
     Object.assign(MWGTM_STATE, defaultState(), dataJson);
     saveState();
@@ -524,20 +524,20 @@ var GUESS;
 var MAP_LIST;
 var ROUND_NUMBER = 0;
 
-if(!GeoGuessrEventFramework) {
+if (!GeoGuessrEventFramework) {
     throw new Error('GeoGuessr Location Manager requires GeoGuessr Event Framework (https://github.com/miraclewhips/geoguessr-event-framework). Please include this before you include GeoGuessr Location Manager.');
 }
 
 
 function addSettingsButtonsToRound() {
     const container = document.querySelector(`div[class^="game_canvas__"]`);
-    if(!container || document.getElementById('mwgtm-settings-buttons')) return;
+    if (!container || document.getElementById('mwgtm-settings-buttons')) return;
 
     let faceNorthBtn = '';
 
-    const settings = JSON.parse(window.localStorage.getItem('game-settings')) ?? {forbidRotating: false};
+    const settings = JSON.parse(window.localStorage.getItem('game-settings')) ?? { forbidRotating: false };
 
-    if(!settings.forbidRotating) {
+    if (!settings.forbidRotating) {
         faceNorthBtn = `<div class="mwgtm-settings-option" id="mwgtm-opt-compass-north">FACE NORTH - [ N ]</div>`;
     }
 
@@ -557,7 +557,7 @@ function addSettingsButtonsToRound() {
     container.appendChild(element);
 
     // Set events for round buttons
-    if(document.getElementById('mwgtm-opt-compass-north')) {
+    if (document.getElementById('mwgtm-opt-compass-north')) {
         document.getElementById('mwgtm-opt-compass-north').addEventListener('click', () => {
             lookNorth();
         });
@@ -587,7 +587,7 @@ function addSettingsButtonsToRound() {
 
 function addSaveToMapToRound() {
     const container = document.querySelector(`div[class^="game_canvas__"]`);
-    if(!container || document.getElementById('mwgtm-settings-buttons')) return;
+    if (!container || document.getElementById('mwgtm-settings-buttons')) return;
 
     const element = document.createElement('div');
     element.id = 'mwgtm-settings-buttons';
@@ -616,12 +616,12 @@ function addSaveToMapToRound() {
 }
 
 function lookNorth() {
-    if(!document.getElementById('mwgtm-opt-compass-north')) return;
+    if (!document.getElementById('mwgtm-opt-compass-north')) return;
 
-    const settings = JSON.parse(window.localStorage.getItem('game-settings')) ?? {forbidRotating: false};
-    if(settings.forbidRotating) return;
+    const settings = JSON.parse(window.localStorage.getItem('game-settings')) ?? { forbidRotating: false };
+    if (settings.forbidRotating) return;
 
-    if(MWGTM_SV) {
+    if (MWGTM_SV) {
         let pov = MWGTM_SV.getPov();
         pov.heading = 0;
         MWGTM_SV.setPov(pov);
@@ -629,9 +629,9 @@ function lookNorth() {
 }
 
 function toggleCompass(hidden) {
-    if(!document.getElementById('mwgtm-opt-compass-toggle')) return;
+    if (!document.getElementById('mwgtm-opt-compass-toggle')) return;
 
-    if(typeof hidden === 'undefined') {
+    if (typeof hidden === 'undefined') {
         hidden = !MWGTM_STATE.compassHidden;
     }
 
@@ -648,20 +648,20 @@ function toggleTerrain(enabled) {
     const terrain_allowed = (MWGTM_STATE.LOOKING_AT_RESULTS || (MWGTM_STATE.PLAYING_A_SEED && (!MWGTM_STATE.ROUND_ACTIVE)));
 
     //console.log(MWGTM_STATE);
-    if(typeof enabled === 'undefined') {
+    if (typeof enabled === 'undefined') {
         enabled = !MWGTM_STATE.terrainEnabled;
     }
     // Do not do anything if trying to enable terrain when not allowed
     if (!terrain_allowed && enabled) return;
 
-    if(document.getElementById('mwgtm-opt-terrain')) {
+    if (document.getElementById('mwgtm-opt-terrain')) {
         document.getElementById('mwgtm-opt-terrain').textContent = enabled ? 'TERRAIN ENABLED - [ T ]' : 'TERRAIN DISABLED - [ T ]';
     }
-    if(document.getElementById('mwgtm-opt-terrain-summary')) {
+    if (document.getElementById('mwgtm-opt-terrain-summary')) {
         document.getElementById('mwgtm-opt-terrain-summary').textContent = enabled ? 'TERRAIN ENABLED - [ T ]' : 'TERRAIN DISABLED - [ T ]';
     }
 
-    if(MWGTM_M) {
+    if (MWGTM_M) {
         MWGTM_M.setMapTypeId(enabled ? 'terrain' : 'roadmap');
     }
 
@@ -670,14 +670,14 @@ function toggleTerrain(enabled) {
 }
 
 function toggleCar(setting) {
-    if(!document.getElementById('mwgtm-opt-car')) return;
+    if (!document.getElementById('mwgtm-opt-car')) return;
 
-    if(typeof setting === 'undefined') {
+    if (typeof setting === 'undefined') {
         setting = (MWGTM_STATE.carSetting + 1) % 3
     }
 
     let label = 'CAR VISIBLE';
-    switch(setting) {
+    switch (setting) {
         case 1: label = 'CAR MASK SLIM'; break;
         case 2: label = 'CAR MASK FULL'; break;
     }
@@ -687,9 +687,9 @@ function toggleCar(setting) {
     MWGTM_STATE.carSetting = setting;
     saveState();
 
-    if(LOADED_CAR_SETTING !== setting) {
+    if (LOADED_CAR_SETTING !== setting) {
         showCarWarning();
-    }else{
+    } else {
         hideCarWarning();
     }
 }
@@ -697,24 +697,24 @@ function toggleCar(setting) {
 function toggleCoverage(enabled) {
     //if(!((document.getElementById('mwgtm-opt-coverage')) || (document.getElementById('mwgtm-opt-coverage-summary')))) return;
     const coverage_allowed = (MWGTM_STATE.LOOKING_AT_RESULTS || (MWGTM_STATE.PLAYING_A_SEED && (!MWGTM_STATE.ROUND_ACTIVE)))
-    if(typeof enabled === 'undefined') {
+    if (typeof enabled === 'undefined') {
         enabled = !MWGTM_STATE.coverageEnabled;
     }
     // Do not do anything if trying to enable coverage when not allowed
     if (!coverage_allowed && enabled) return;
 
-    if(document.getElementById('mwgtm-opt-coverage')) {
+    if (document.getElementById('mwgtm-opt-coverage')) {
         document.getElementById('mwgtm-opt-coverage').textContent = enabled ? 'COVERAGE VISIBLE - [ B ]' : 'COVERAGE HIDDEN - [ B ]';
     }
-    if(document.getElementById('mwgtm-opt-coverage-summary')) {
+    if (document.getElementById('mwgtm-opt-coverage-summary')) {
         document.getElementById('mwgtm-opt-coverage-summary').textContent = enabled ? 'COVERAGE VISIBLE - [ B ]' : 'COVERAGE HIDDEN - [ B ]';
     }
 
-    if(MWGTM_SVC && MWGTM_M) {
-        if(enabled) {
+    if (MWGTM_SVC && MWGTM_M) {
+        if (enabled) {
             MWGTM_M.overlayMapTypes.insertAt(0, MWGTM_SVC);
             MWGTM_M.overlayMapTypes.insertAt(1, MWGTM_LABELS);
-        }else{
+        } else {
             MWGTM_M.overlayMapTypes.removeAt(1);
             MWGTM_M.overlayMapTypes.removeAt(0);
         }
@@ -726,7 +726,7 @@ function toggleCoverage(enabled) {
 
 function showCarWarning() {
     const container = document.querySelector(`div[class^="game_canvas__"]`);
-    if(!container || document.getElementById('mwgtm-car-warning')) return;
+    if (!container || document.getElementById('mwgtm-car-warning')) return;
 
     const element = document.createElement('div');
     element.id = 'mwgtm-car-warning';
@@ -736,11 +736,11 @@ function showCarWarning() {
 
 function hideCarWarning() {
     const element = document.getElementById('mwgtm-car-warning');
-    if(element) element.remove();
+    if (element) element.remove();
 }
 
 function showLoader() {
-    if(document.getElementById('mwgtm-loader')) return;
+    if (document.getElementById('mwgtm-loader')) return;
 
     const element = document.createElement('div');
     element.id = 'mwgtm-loader';
@@ -754,42 +754,42 @@ function showLoader() {
 
 function hideLoader() {
     const element = document.getElementById('mwgtm-loader');
-    if(element) element.remove();
+    if (element) element.remove();
 }
 
 async function clickedMapButton(e) {
-    if(MAP_MAKING_API_KEY === 'PASTE_YOUR_KEY_HERE') {
+    if (MAP_MAKING_API_KEY === 'PASTE_YOUR_KEY_HERE') {
         alert('An API Key is required in order to save locations to Map Making App. Please add your API key by editing the Userscript and following the instructions at the top of the script.');
         return;
     }
 
-    if(!MAP_LIST) {
+    if (!MAP_LIST) {
         showLoader();
 
         try {
             MAP_LIST = await getMaps();
-        }catch{}
+        } catch { }
 
         hideLoader();
     }
 
-    if(MAP_LIST) {
+    if (MAP_LIST) {
         showMapList()
     }
 }
 
 function showMapList() {
-    if(document.getElementById('mwgtm-map-list')) return;
+    if (document.getElementById('mwgtm-map-list')) return;
 
     const element = document.createElement('div');
     element.id = 'mwgtm-map-list';
     element.className = 'mwgtm-modal';
 
     let recentMapsSection = ``;
-    if(MWGTM_STATE.recentMaps.length > 0) {
+    if (MWGTM_STATE.recentMaps.length > 0) {
         let recentMapsHTML = '';
-        for(let m of MWGTM_STATE.recentMaps) {
-            if(m.archivedAt) continue;
+        for (let m of MWGTM_STATE.recentMaps) {
+            if (m.archivedAt) continue;
             recentMapsHTML += `<div class="map">
 				<span class="map-name">${m.name}</span>
 				<span class="map-buttons">
@@ -811,8 +811,8 @@ function showMapList() {
     }
 
     let mapsHTML = '';
-    for(let m of MAP_LIST) {
-        if(m.archivedAt) continue;
+    for (let m of MAP_LIST) {
+        if (m.archivedAt) continue;
         mapsHTML += `<div class="map">
 			<span class="map-name">${m.name}</span>
 			<span class="map-buttons">
@@ -851,14 +851,14 @@ function showMapList() {
     document.getElementById('mwgtm-map-tags').addEventListener('keypress', e => e.stopPropagation());
     document.getElementById('mwgtm-map-tags').focus();
 
-    for(let map of element.querySelectorAll('.maps .map-add')) {
+    for (let map of element.querySelectorAll('.maps .map-add')) {
         map.addEventListener('click', addLocationToMap);
     }
 }
 
 function closeMapList(e) {
     const element = document.getElementById('mwgtm-map-list');
-    if(element) element.remove();
+    if (element) element.remove();
 }
 
 function addLocationToMap(e) {
@@ -866,8 +866,8 @@ function addLocationToMap(e) {
 
     const id = parseInt(e.target.dataset.id);
     MWGTM_STATE.recentMaps = MWGTM_STATE.recentMaps.filter(e => e.id !== id).slice(0, 2);
-    for(let map of MAP_LIST) {
-        if(map.id === id) {
+    for (let map of MAP_LIST) {
+        if (map.id === id) {
             MWGTM_STATE.recentMaps.unshift(map);
             break;
         }
@@ -881,7 +881,7 @@ function addLocationToMap(e) {
 
         importLocations(id, [{
             id: -1,
-            location: {lat: LOCATION.lat, lng: LOCATION.lng},
+            location: { lat: LOCATION.lat, lng: LOCATION.lng },
             panoId: LOCATION.panoId ?? null,
             heading: LOCATION.heading,
             pitch: LOCATION.pitch,
@@ -900,7 +900,7 @@ function addLocationToMap(e) {
         console.log(MWGTM_SV.getPov().zoom);
         importLocations(id, [{
             id: -1,
-            location: {lat: MWGTM_SV.getPosition().lat(), lng: MWGTM_SV.getPosition().lng()},
+            location: { lat: MWGTM_SV.getPosition().lat(), lng: MWGTM_SV.getPosition().lng() },
             panoId: MWGTM_SV.pano ?? null,
             heading: MWGTM_SV.getPov().heading,
             pitch: MWGTM_SV.getPov().pitch,
@@ -915,7 +915,7 @@ function googleMapsLink(loc) {
     const fov = 180 / Math.pow(2, loc.zoom ?? 0);
     let link = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${loc.lat},${loc.lng}&heading=${loc.heading}&pitch=${loc.pitch}&fov=${fov}`;
 
-    if(loc.panoId) {
+    if (loc.panoId) {
         link += `&pano=${loc.panoId}`;
     }
 
@@ -926,7 +926,7 @@ function googleMapsLink(loc) {
 
 function addSettingsButtonsToSummary() {
     const container = document.querySelector(`div[data-qa="result-view-top"]`);
-    if(!container || document.getElementById('mwgtm-settings-buttons-summary')) return;
+    if (!container || document.getElementById('mwgtm-settings-buttons-summary')) return;
 
     const element = document.createElement('div');
     element.id = 'mwgtm-settings-buttons-summary';
@@ -986,7 +986,7 @@ function createSettingsButtonSummaryEvents() {
 
 function addSettingsButtonsToResultsPage() {
     const container = document.querySelector(`div[class^="results_root__"]`);
-    if(!container || document.getElementById('mwgtm-settings-buttons-results')) return;
+    if (!container || document.getElementById('mwgtm-settings-buttons-results')) return;
 
     const element = document.createElement('div');
     element.id = 'mwgtm-settings-buttons-results';
@@ -1031,7 +1031,7 @@ function createSettingsButtonResultsEvents() {
     document.getElementById('mwgtm-opt-save-loc-results').addEventListener('click', () => {
         const rounds = getGameData().rounds;
         if (rounds) {
-            LOCATION = rounds[ROUND_NUMBER-1];
+            LOCATION = rounds[ROUND_NUMBER - 1];
             console.log(LOCATION);
             clickedMapButton();
         }
@@ -1041,7 +1041,7 @@ function createSettingsButtonResultsEvents() {
         const rounds = getGameData().rounds;
         if (rounds) {
             console.log(rounds);
-            LOCATION = rounds[ROUND_NUMBER-1];
+            LOCATION = rounds[ROUND_NUMBER - 1];
             console.log(LOCATION);
             const link = googleMapsLink(LOCATION);
             GM_openInTab(link, false);
@@ -1052,7 +1052,7 @@ function createSettingsButtonResultsEvents() {
         console.log(getGameData().player.guesses);
         const guesses = getGameData().player.guesses;
         if (guesses) {
-            GUESS = guesses[ROUND_NUMBER-1];
+            GUESS = guesses[ROUND_NUMBER - 1];
             console.log(GUESS);
             showSV(GUESS);
         }
@@ -1077,9 +1077,9 @@ GeoGuessrEventFramework.init().then(GEF => {
     console.log('GeoGuessr Training Mode initialised.');
 
     document.addEventListener('keypress', (e) => {
-        if(e.ctrlKey || e.shiftKey || e.metaKey || e.altKey || document.activeElement.tagName === 'INPUT') return;
+        if (e.ctrlKey || e.shiftKey || e.metaKey || e.altKey || document.activeElement.tagName === 'INPUT') return;
 
-        switch(e.code) {
+        switch (e.code) {
             case 'KeyN': lookNorth(); return;
             case 'KeyH': toggleCompass(); return;
             case 'KeyT': toggleTerrain(); return;
@@ -1106,7 +1106,7 @@ GeoGuessrEventFramework.init().then(GEF => {
         saveState();
     });
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         const text = e.target.textContent.trim();
         if ((text.startsWith('Round ')) || (text === "Total")) {
             const threeOps = document.getElementById('mwgtm-settings-buttons-results-3ops');
@@ -1161,7 +1161,7 @@ GeoGuessrEventFramework.init().then(GEF => {
         console.log(MWGTM_STATE);
         const loc = state.detail.rounds[state.detail.rounds.length - 1]?.location;
         GUESS = state.detail.rounds[state.detail.rounds.length - 1]?.player_guess;
-        if(!loc) return;
+        if (!loc) return;
         LOCATION = loc;
     });
 
@@ -1179,13 +1179,13 @@ const observer = new MutationObserver(() => {
     addSettingsButtonsToSummary();
     addSettingsButtonsToResultsPage();
 
-    if(document.getElementById('mwgtm-restore-classic-compass')) return;
+    if (document.getElementById('mwgtm-restore-classic-compass')) return;
 
     const controls = document.querySelector(`aside[class^="game_controls__"]`) || document.querySelector(`aside[class^="game-panorama_controls__"]`);
-    if(!controls) return;
+    if (!controls) return;
 
     const container = controls.querySelector('div[class^="styles_columnOne__"]');
-    if(container) {
+    if (container) {
         let compass = document.createElement('div');
         compass.id = 'mwgtm-restore-classic-compass';
         compass.className = 'mwgtm-compass';
@@ -1196,11 +1196,11 @@ const observer = new MutationObserver(() => {
     }
 });
 
-if(document.readyState === 'loading') {
+if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         observer.observe(document.querySelector('#__next'), { subtree: true, childList: true });
     });
-}else{
+} else {
     observer.observe(document.querySelector('#__next'), { subtree: true, childList: true });
 }
 
@@ -1244,7 +1244,7 @@ function injecter(overrider) {
     }).observe(document.documentElement, { childList: true, subtree: true });
 }
 
-function showSV (latlng) {
+function showSV(latlng) {
     const streetViewService = new google.maps.StreetViewService();
 
     streetViewService.getPanorama(
@@ -1255,7 +1255,7 @@ function showSV (latlng) {
         (data, status) => {
             if (status === google.maps.StreetViewStatus.OK) {
                 console.log("Closest pano at:", data.location?.latLng);
-                const myLoc = {lat: data.location?.latLng.lat(), lng: data.location?.latLng.lng(), heading: 0, pitch: 0, zoom: 0};
+                const myLoc = { lat: data.location?.latLng.lat(), lng: data.location?.latLng.lng(), heading: 0, pitch: 0, zoom: 0 };
                 console.log(myLoc);
                 const link = googleMapsLink(myLoc);
                 GM_openInTab(link, false);
@@ -1267,7 +1267,7 @@ function showSV (latlng) {
 document.addEventListener('DOMContentLoaded', (event) => {
     injecter(() => {
         const google = window['google'] || unsafeWindow['google'];
-        if(!google) return;
+        if (!google) return;
 
         google.maps.StreetViewPanorama = class extends google.maps.StreetViewPanorama {
             constructor(...args) {
@@ -1298,9 +1298,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 });
 
                 MWGTM_LABELS = new google.maps.StyledMapType([
-                    {featureType: 'all', stylers: [{visibility: 'off'}]},
-                    {featureType: 'all', elementType: 'labels', stylers: [{visibility: 'on'}]},
-                ], {name: 'labels'});;
+                    { featureType: 'all', stylers: [{ visibility: 'off' }] },
+                    { featureType: 'all', elementType: 'labels', stylers: [{ visibility: 'on' }] },
+                ], { name: 'labels' });;
 
                 //                 MWGTM_M.addListener('idle', () => {
                 //                     toggleTerrain(MWGTM_STATE.terrainEnabled);
@@ -1311,8 +1311,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     console.log("Click detected");
                     console.log("PLAYING A SEED = " + MWGTM_STATE.PLAYING_A_SEED);
                     console.log("LOOKING AT RESULTS = " + MWGTM_STATE.LOOKING_AT_RESULTS);
-                    if (((MWGTM_STATE.PLAYING_A_SEED) && (!MWGTM_STATE.ROUND_ACTIVE)) || (MWGTM_STATE.LOOKING_AT_RESULTS)) {
-                        showSV({ lat: event.latLng.lat(), lng: event.latLng.lng() });
+                    const element = document.elementFromPoint(event.pixel.x, event.pixel.y);
+                    if (element.matches('img[alt="Correct location"]')) {
+                        console.log('Correct image clicked!');
+                    } else {
+                        console.log('Something else was clicked:', element.tagName, element);
+                        if (((MWGTM_STATE.PLAYING_A_SEED) && (!MWGTM_STATE.ROUND_ACTIVE)) || (MWGTM_STATE.LOOKING_AT_RESULTS)) {
+                            showSV({ lat: event.latLng.lat(), lng: event.latLng.lng() });
+                        }
                     }
                 });
             }
@@ -1421,13 +1427,13 @@ gl_FragColor=i;
 }`;
 
 function getVertexShader() {
-    switch(MWGTM_STATE.carSetting) {
+    switch (MWGTM_STATE.carSetting) {
         case 1: return vertexNewSlim;
         case 2: return vertexNewFull;
     }
 }
 function getFragShader() {
-    switch(MWGTM_STATE.carSetting) {
+    switch (MWGTM_STATE.carSetting) {
         case 1: return fragNewSlim;
         case 2: return fragNewFull;
     }
@@ -1437,13 +1443,13 @@ function installShaderSource(ctx) {
     const oldShaderSource = ctx.shaderSource;
 
     function shaderSource() {
-        if(typeof arguments[1] === 'string') {
-            if(arguments[1] === vertexOld) {
+        if (typeof arguments[1] === 'string') {
+            if (arguments[1] === vertexOld) {
                 const s = getVertexShader();
-                if(s) arguments[1] = s;
-            }else if (arguments[1] === fragOld) {
+                if (s) arguments[1] = s;
+            } else if (arguments[1] === fragOld) {
                 const s = getFragShader();
-                if(s) arguments[1] = s;
+                if (s) arguments[1] = s;
             }
         }
         return oldShaderSource.apply(this, arguments);
@@ -1455,9 +1461,9 @@ function installShaderSource(ctx) {
 function installGetContext(el) {
     const oldGetContext = el.getContext;
 
-    el.getContext = function() {
+    el.getContext = function () {
         const ctx = oldGetContext.apply(this, arguments);
-        if((arguments[0] === 'webgl' || arguments[0] === 'webgl2') && ctx && ctx.shaderSource && ctx.shaderSource.bestcity !== 'bintulu') {
+        if ((arguments[0] === 'webgl' || arguments[0] === 'webgl2') && ctx && ctx.shaderSource && ctx.shaderSource.bestcity !== 'bintulu') {
             installShaderSource(ctx);
         }
         return ctx;
@@ -1465,9 +1471,9 @@ function installGetContext(el) {
 }
 const oldCreateElement = document.createElement;
 
-document.createElement = function() {
+document.createElement = function () {
     const el = oldCreateElement.apply(this, arguments);
-    if(arguments[0] === 'canvas' || arguments[0] === 'CANVAS') {
+    if (arguments[0] === 'canvas' || arguments[0] === 'CANVAS') {
         installGetContext(el);
     }
     return el;
