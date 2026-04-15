@@ -393,24 +393,6 @@ function pointCompass() {
     arrow.style.transform = `rotate(${-heading}deg)`;
 }
 
-// function startTimer() {
-//     console.log('startTimer called');
-//     const el = document.getElementById('mwgtm-timer');
-//     if (!el) return;
-//     console.log ("I got here");
-//     MWGTM_STATE.timerStart = Date.now();
-
-//     if (MWGTM_STATE.timerInterval) clearInterval(MWGTM_STATE.timerInterval);
-
-//     MWGTM_STATE.timerInterval = setInterval(() => {
-//         console.log('tick', MWGTM_STATE.timerStart);
-//         const elapsed = Math.floor((Date.now() - MWGTM_STATE.timerStart) / 1000);
-//         const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
-//         const s = String(elapsed % 60).padStart(2, '0');
-//         el.textContent = `${m}:${s}`;
-//     }, 1000);
-// }
-
 function startTimer() {
     MWGTM_STATE.timerStart = Date.now();
 
@@ -501,9 +483,6 @@ async function getMaps() {
     return maps;
 }
 async function importLocations(mapId, locations) {
-    //     console.log (mapId);
-    //     console.log(locations);
-    //     return;
     const response = await mmaFetch(`/api/maps/${mapId}/locations`, {
         method: 'post',
         headers: {
@@ -529,70 +508,6 @@ if (!GeoGuessrEventFramework) {
     throw new Error('GeoGuessr Location Manager requires GeoGuessr Event Framework (https://github.com/miraclewhips/geoguessr-event-framework). Please include this before you include GeoGuessr Location Manager.');
 }
 
-
-// function addSettingsButtonsToRound() {
-//     const container = document.querySelector(`div[class^="game_canvas__"]`);
-//     if (!container || document.getElementById('mwgtm-settings-buttons')) return;
-
-//     let faceNorthBtn = '';
-
-//     const settings = JSON.parse(window.localStorage.getItem('game-settings')) ?? { forbidRotating: false };
-
-//     if (!settings.forbidRotating) {
-//         faceNorthBtn = `<div class="mwgtm-settings-option" id="mwgtm-opt-compass-north">FACE NORTH - [ N ]</div>`;
-//     }
-
-//     const element = document.createElement('div');
-//     element.id = 'mwgtm-settings-buttons';
-//     element.className = 'mwgtm-settings extra-pad';
-//     element.innerHTML = `
-//         	<div class="mwgtm-title">TRAINING MODE</div>
-//         	<div class="mwgtm-subtitle">by <a href="https://miraclewhips.dev/" target="_blank" rel="noopener noreferrer">miraclewhips</a>. <a href="https://ko-fi.com/miraclewhips" target="_blank" rel="noopener noreferrer">Support my work</a>.</div>
-//         	${faceNorthBtn}
-//         	<div class="mwgtm-settings-option" id="mwgtm-opt-compass-toggle">COMPASS VISIBLE - [ H ]</div>
-//         	<div class="mwgtm-settings-option" id="mwgtm-opt-terrain">TERRAIN DISABLED - [ T ]</div>
-//         	<div class="mwgtm-settings-option" id="mwgtm-opt-car">CAR VISIBLE - [ M ]</div>
-//         	<div class="mwgtm-settings-option" id="mwgtm-opt-coverage">COVERAGE HIDDEN - [ B ]</div>
-//         `;
-
-//     container.appendChild(element);
-
-//     // Set events for round buttons
-//     if (document.getElementById('mwgtm-opt-compass-north')) {
-//         document.getElementById('mwgtm-opt-compass-north').addEventListener('click', () => {
-//             lookNorth();
-//         });
-//     }
-
-//     document.getElementById('mwgtm-opt-compass-toggle').addEventListener('click', () => {
-//         toggleCompass();
-//     });
-
-//     document.getElementById('mwgtm-opt-terrain').addEventListener('click', () => {
-//         //toggleTerrain();
-//         toggleMapType(MWGTM_STATE.terrainEnabled ? 'roadmap' : 'terrain');
-//     });
-
-//     document.getElementById('mwgtm-opt-terrain').addEventListener('click', () => {
-//         //toggleSatellite();
-//         toggleMapType(MWGTM_STATE.satelliteEnabled ? 'roadmap' : 'satellite');
-//     });
-
-//     document.getElementById('mwgtm-opt-car').addEventListener('click', () => {
-//         toggleCar();
-//     });
-
-//     document.getElementById('mwgtm-opt-coverage').addEventListener('click', () => {
-//         toggleCoverage();
-//     });
-
-//     toggleCompass(MWGTM_STATE.compassHidden);
-//     toggleTerrain(MWGTM_STATE.terrainEnabled);
-//     toggleSatellite(MWGTM_STATE.satelliteEnabled);
-//     toggleCar(MWGTM_STATE.carSetting);
-//     toggleCoverage(MWGTM_STATE.coverageEnabled);
-// }
-
 function addSaveToMapToRound() {
     const container = document.querySelector(`div[class^="game_canvas__"]`);
     if (!container || document.getElementById('mwgtm-settings-buttons')) return;
@@ -615,15 +530,10 @@ function addSaveToMapToRound() {
         clickedMapButton();
     });
 
-    // MWGTM_STATE.terrainEnabled = false;
-    // toggleTerrain(MWGTM_STATE.terrainEnabled);
-    // MWGTM_STATE.satelliteEnabled = false;
-    // toggleSatellite(MWGTM_STATE.satelliteEnabled);
     toggleMapType('roadmap');
     MWGTM_STATE.coverageEnabled = false;
     toggleCoverage(MWGTM_STATE.coverageEnabled);
     saveState();
-
 }
 
 function lookNorth() {
@@ -653,77 +563,13 @@ function toggleCompass(hidden) {
     saveState();
 }
 
-// function toggleTerrain(enabled) {
-//     //console.log("Got to toggleTerrain with " + enabled);
-//     //if(!((document.getElementById('mwgtm-opt-terrain')) || (document.getElementById('mwgtm-opt-terrain-summary')))) return;
-//     const terrain_allowed = (MWGTM_STATE.LOOKING_AT_RESULTS || (MWGTM_STATE.PLAYING_A_SEED && (!MWGTM_STATE.ROUND_ACTIVE)));
-
-//     //console.log(MWGTM_STATE);
-//     if (typeof enabled === 'undefined') {
-//         enabled = !MWGTM_STATE.terrainEnabled;
-//     }
-//     // Do not do anything if trying to enable terrain when not allowed
-//     if (!terrain_allowed && enabled) return;
-
-//     if (document.getElementById('mwgtm-opt-terrain')) {
-//         document.getElementById('mwgtm-opt-terrain').textContent = enabled ? 'TERRAIN ENABLED - [ T ]' : 'TERRAIN DISABLED - [ T ]';
-//     }
-//     if (document.getElementById('mwgtm-opt-terrain-summary')) {
-//         document.getElementById('mwgtm-opt-terrain-summary').textContent = enabled ? 'TERRAIN ENABLED - [ T ]' : 'TERRAIN DISABLED - [ T ]';
-//     }
-
-//     if (MWGTM_M) {
-//         MWGTM_M.setMapTypeId(enabled ? 'terrain' : 'roadmap');
-//     }
-
-//     MWGTM_STATE.terrainEnabled = enabled;
-//     saveState();
-// }
-
-// function toggleSatellite(enabled) {
-//     //console.log("Got to toggleSatellite with " + enabled);
-//     //if(!((document.getElementById('mwgtm-opt-terrain')) || (document.getElementById('mwgtm-opt-terrain-summary')))) return;
-//     const satellite_allowed = (MWGTM_STATE.LOOKING_AT_RESULTS || (MWGTM_STATE.PLAYING_A_SEED && (!MWGTM_STATE.ROUND_ACTIVE)));
-
-//     //console.log(MWGTM_STATE);
-//     if (typeof enabled === 'undefined') {
-//         enabled = !MWGTM_STATE.satelliteEnabled;
-//     }
-//     // Do not do anything if trying to enable satellite when not allowed
-//     if (!satellite_allowed && enabled) return;
-
-//     if (document.getElementById('mwgtm-opt-satellite')) {
-//         document.getElementById('mwgtm-opt-satellite').textContent = enabled ? 'SATELLITE ENABLED - [ S ]' : 'SATELLITE DISABLED - [ S ]';
-//     }
-//     if (document.getElementById('mwgtm-opt-satellite-summary')) {
-//         document.getElementById('mwgtm-opt-satellite-summary').textContent = enabled ? 'SATELLITE ENABLED - [ S ]' : 'SATELLITE DISABLED - [ S ]';
-//     }
-
-//     if (MWGTM_M) {
-//         if (enabled) MWGTM_M.setMapTypeId('satellite');
-//         else MWGTM_M.setMapTypeId(MWGTM_STATE.terrainEnabled ? 'terrain' : 'roadmap');
-//     }
-
-//     MWGTM_STATE.satelliteEnabled = enabled;
-//     saveState();
-// }
-
 function toggleMapType(mapType) {
 
     // Do not do anything if trying to change map type when not allowed
     const allowed = (MWGTM_STATE.LOOKING_AT_RESULTS || (MWGTM_STATE.PLAYING_A_SEED && (!MWGTM_STATE.ROUND_ACTIVE)));
     if (!allowed) return;
 
-    // if (typeof enabled === 'undefined') {
-    //     enabled = !MWGTM_STATE.satelliteEnabled;
-    // }
-    
-
-    
-
     if (MWGTM_M) {
-        // if (enabled) MWGTM_M.setMapTypeId('satellite');
-        // else MWGTM_M.setMapTypeId(MWGTM_STATE.terrainEnabled ? 'terrain' : 'roadmap');
         MWGTM_M.setMapTypeId(mapType);
     }
 
@@ -1082,12 +928,10 @@ function createSettingsButtonSummaryEvents() {
     });
 
     document.getElementById('mwgtm-opt-terrain-summary').addEventListener('click', () => {
-        //toggleTerrain();
         toggleMapType(MWGTM_STATE.terrainEnabled ? 'roadmap' : 'terrain');
     });
 
     document.getElementById('mwgtm-opt-satellite-summary').addEventListener('click', () => {
-        //toggleSatellite();
         toggleMapType(MWGTM_STATE.satelliteEnabled ? 'roadmap' : 'satellite');
     });
 
@@ -1095,10 +939,6 @@ function createSettingsButtonSummaryEvents() {
         toggleCoverage();
     });
 
-    // MWGTM_STATE.terrainEnabled = false;
-    // toggleTerrain(MWGTM_STATE.terrainEnabled);
-    // MWGTM_STATE.satelliteEnabled = false;
-    // toggleSatellite(MWGTM_STATE.satelliteEnabled);
     toggleMapType('roadmap');
     MWGTM_STATE.coverageEnabled = false;
     toggleCoverage(MWGTM_STATE.coverageEnabled);
@@ -1194,10 +1034,6 @@ function createSettingsButtonResultsEvents() {
         toggleCoverage();
     });
 
-    // MWGTM_STATE.terrainEnabled = false;
-    // toggleTerrain(MWGTM_STATE.terrainEnabled);
-    // MWGTM_STATE.satelliteEnabled = false;
-    // toggleSatellite(MWGTM_STATE.satelliteEnabled);
     toggleMapType('roadmap');
     MWGTM_STATE.coverageEnabled = false;
     toggleCoverage(MWGTM_STATE.coverageEnabled);
@@ -1271,10 +1107,6 @@ GeoGuessrEventFramework.init().then(GEF => {
     GEF.events.addEventListener('round_start', (state) => {
         console.log("BTM:Round started");
         MWGTM_STATE.ROUND_ACTIVE = true;
-        //MWGTM_STATE.terrainEnabled = false;
-        // toggleTerrain(MWGTM_STATE.terrainEnabled);
-        // MWGTM_STATE.satelliteEnabled = false;
-        // toggleSatellite(MWGTM_STATE.satelliteEnabled);
         toggleMapType('roadmap');
         MWGTM_STATE.coverageEnabled = false;
         toggleCoverage(MWGTM_STATE.coverageEnabled);
@@ -1287,10 +1119,6 @@ GeoGuessrEventFramework.init().then(GEF => {
         console.log("BTM:Round ended");
         console.log(state);
         MWGTM_STATE.ROUND_ACTIVE = false;
-        //MWGTM_STATE.terrainEnabled = false;
-        // toggleTerrain(MWGTM_STATE.terrainEnabled);
-        // MWGTM_STATE.satelliteEnabled = false;
-        // toggleSatellite(MWGTM_STATE.satelliteEnabled);
         toggleMapType('roadmap');
         MWGTM_STATE.coverageEnabled = false;
         toggleCoverage(MWGTM_STATE.coverageEnabled);
@@ -1312,7 +1140,6 @@ GeoGuessrEventFramework.init().then(GEF => {
 
 //styles_columnOne__rw8hK
 const observer = new MutationObserver(() => {
-    //addSettingsButtonsToRound();
     addSaveToMapToRound();
     addSettingsButtonsToSummary();
     addSettingsButtonsToResultsPage();
@@ -1343,6 +1170,26 @@ if (document.readyState === 'loading') {
 }
 
 let MWGTM_SV, MWGTM_M, MWGTM_SVC, MWGTM_LABELS;
+let isHoveringFlag = false;
+
+const flagObserver = new MutationObserver(() => {
+    const markers = document.querySelectorAll('[data-qa="correct-location-marker"]');
+    
+    if (markers.length > 0) {
+        markers.forEach(marker => {
+            marker.addEventListener('mouseenter', () => {
+                isHoveringFlag = true;
+            });
+            marker.addEventListener('mouseleave', () => {
+                isHoveringFlag = false;
+            });
+        });
+
+        flagObserver.disconnect();
+    }
+});
+
+flagObserver.observe(document.body, { childList: true, subtree: true });
 
 // Script injection, extracted from unityscript extracted from extenssr:
 // https://gitlab.com/nonreviad/extenssr/-/blob/main/src/injected_scripts/maps_api_injecter.ts
@@ -1449,12 +1296,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     console.log("Click detected");
                     console.log("PLAYING A SEED = " + MWGTM_STATE.PLAYING_A_SEED);
                     console.log("LOOKING AT RESULTS = " + MWGTM_STATE.LOOKING_AT_RESULTS);
-                    const element = document.elementFromPoint(event.pixel.x, event.pixel.y);
-                    if (element.matches('img[alt="Correct location"]')) {
-                        console.log('Correct image clicked!');
+                    if (isHoveringFlag) {
+                        console.log('Flag image clicked!');
                     } else {
-                        console.log('Something else was clicked:', element.tagName, element);
-                        if (((MWGTM_STATE.PLAYING_A_SEED) && (!MWGTM_STATE.ROUND_ACTIVE)) || (MWGTM_STATE.LOOKING_AT_RESULTS)) {
+                        console.log("Click off the flag image");
+                        let not_in_round = ((MWGTM_STATE.PLAYING_A_SEED) && (!MWGTM_STATE.ROUND_ACTIVE)) || (MWGTM_STATE.LOOKING_AT_RESULTS);
+                        if (not_in_round && MWGTM_STATE.coverageEnabled) {
                             showSV({ lat: event.latLng.lat(), lng: event.latLng.lng() });
                         }
                     }
