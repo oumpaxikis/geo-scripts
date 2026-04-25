@@ -35,25 +35,6 @@ const MAP_MAKING_API_KEY = "a23929df-2bb3-4b93-b230-cddd4b912ae1";
 
 if (window.frameElement) return;
 
-// const originalOpen = XMLHttpRequest.prototype.open;
-// XMLHttpRequest.prototype.open = function(method, url, ...rest) {
-//     console.log('XHR URL:', url);
-//   if (url.includes('duel') || url.includes('game')) {
-//     console.log('XHR URL:', url);
-//   }
-//   return originalOpen.call(this, method, url, ...rest);
-// };
-
-// const originalFetch = window.fetch;
-// window.fetch = async function(...args) {
-//   const response = await originalFetch(...args);
-//   console.log('URL:', args[0]);
-//   if (typeof args[0] === 'string' && args[0].includes('duels')) {
-//     console.log('URL:', args[0]);
-//   }
-//   return response;
-// };
-
 const script = document.createElement('script');
 script.textContent = `
   const originalPushState = history.pushState;
@@ -89,9 +70,10 @@ const compassColors = {
     nw: '#ffa1d6',
 }
 
-let MWGTM_SV, MWGTM_M, MWGTM_SVC, MWGTM_LABELS;
+let MWGTM_SV, MWGTM_SVC, MWGTM_LABELS;
+//let MWGTM_SV, MWGTM_M, MWGTM_SVC, MWGTM_LABELS;
 let isHoveringFlag = false;
-const allMaps = [];
+const allMapObjects = [];
 
 GM_addStyle(`
 .mwgtm-override-classic-compass button[class^="compass_compass__"],
@@ -644,66 +626,60 @@ function toggleMapType(mapType) {
     const allowed = (MWGTM_STATE.LOOKING_AT_RESULTS || (MWGTM_STATE.PLAYING_A_SEED && (!MWGTM_STATE.ROUND_ACTIVE)));
     if (!allowed) return;
 
-    if (MWGTM_M) {
-        //MWGTM_M.setMapTypeId(mapType);
+    // 5 lines can go
+    //console.log("Current MWGTM_M:", MWGTM_M);
+    console.log("All maps:", allMapObjects);
+    //console.log("Are they the same?", allMaps[allMaps.length - 1] === MWGTM_M);
+    const index = getActiveMapIndex();
+    console.log("Active map index:", index); // -1 if not found
 
-        //try {
-        console.log("Current MWGTM_M:", MWGTM_M);
-        console.log("All maps:", allMaps);
-        console.log("Are they the same?", allMaps[allMaps.length - 1] === MWGTM_M);
-        //const { index, activeMap } = getActiveMap();
-        const index = getActiveMap();
-        console.log("Active map index:", index); // -1 if not found
-        console.log(allMaps[index]);
+    const activeMap = getActiveMap();
+
+    if (activeMap) {
         //console.log(activeMap);
-        allMaps[index].setMapTypeId(mapType);
-        //MWGTM_M.setMapTypeId(mapType);
+        activeMap.setMapTypeId(mapType);
         // MWGTM_M.addListener('idle', () => {
         //     MWGTM_M.setMapTypeId(mapType);
         // });
-        // } catch (e) {
-        //     console.error('setMapTypeId failed:', e);
-        // }
-
-        console.log(MWGTM_M instanceof google.maps.Map);
-
-        if (mapType == 'roadmap') {
-            MWGTM_STATE.satelliteEnabled = false;
-            MWGTM_STATE.terrainEnabled = false;
-        } else if (mapType == 'terrain') {
-            MWGTM_STATE.satelliteEnabled = false;
-            MWGTM_STATE.terrainEnabled = true;
-        } else if (mapType == 'satellite') {
-            MWGTM_STATE.satelliteEnabled = true;
-            MWGTM_STATE.terrainEnabled = false;
-        }
-
-        const terrainButtons = document.querySelectorAll('.btm-terrain-button');
-        for (const tb of terrainButtons) {
-            if (mapType == 'roadmap') {
-                tb.textContent = 'TERRAIN DISABLED - [ T ]';
-            } else if (mapType == 'terrain') {
-                tb.textContent = 'TERRAIN ENABLED - [ T ]';
-            } else if (mapType == 'satellite') {
-                tb.textContent = 'TERRAIN DISABLED - [ T ]';
-            }
-        }
-
-        const satelliteButtons = document.querySelectorAll('.btm-satellite-button');
-        for (const sb of satelliteButtons) {
-            if (mapType == 'roadmap') {
-                sb.textContent = 'SATELLITE DISABLED - [ S ]';
-            } else if (mapType == 'terrain') {
-                sb.textContent = 'SATELLITE DISABLED - [ S ]';
-            } else if (mapType == 'satellite') {
-                sb.textContent = 'SATELLITE ENABLED - [ S ]';
-            }
-        }
-
-        saveState();
     } else {
-        console.log("No map found");
+        console.log("No map found to toggle type");
     }
+
+    if (mapType == 'roadmap') {
+        MWGTM_STATE.satelliteEnabled = false;
+        MWGTM_STATE.terrainEnabled = false;
+    } else if (mapType == 'terrain') {
+        MWGTM_STATE.satelliteEnabled = false;
+        MWGTM_STATE.terrainEnabled = true;
+    } else if (mapType == 'satellite') {
+        MWGTM_STATE.satelliteEnabled = true;
+        MWGTM_STATE.terrainEnabled = false;
+    }
+
+    const terrainButtons = document.querySelectorAll('.btm-terrain-button');
+    for (const tb of terrainButtons) {
+        if (mapType == 'roadmap') {
+            tb.textContent = 'TERRAIN DISABLED - [ T ]';
+        } else if (mapType == 'terrain') {
+            tb.textContent = 'TERRAIN ENABLED - [ T ]';
+        } else if (mapType == 'satellite') {
+            tb.textContent = 'TERRAIN DISABLED - [ T ]';
+        }
+    }
+
+    const satelliteButtons = document.querySelectorAll('.btm-satellite-button');
+    for (const sb of satelliteButtons) {
+        if (mapType == 'roadmap') {
+            sb.textContent = 'SATELLITE DISABLED - [ S ]';
+        } else if (mapType == 'terrain') {
+            sb.textContent = 'SATELLITE DISABLED - [ S ]';
+        } else if (mapType == 'satellite') {
+            sb.textContent = 'SATELLITE ENABLED - [ S ]';
+        }
+    }
+
+    saveState();
+
 }
 
 function toggleCar(setting) {
@@ -739,42 +715,31 @@ function toggleCoverage(enabled) {
     // Do not do anything if trying to enable coverage when not allowed
     if (!coverage_allowed && enabled) return;
 
-    //try {
-    console.log("Current MWGTM_M:", MWGTM_M);
-    console.log("All maps:", allMaps);
-    console.log("Are they the same?", allMaps[allMaps.length - 1] === MWGTM_M);
-    const index = getActiveMap();
+    // 5 lines can go
+    //console.log("Current MWGTM_M:", MWGTM_M);
+    console.log("All maps:", allMapObjects);
+    //console.log("Are they the same?", allMaps[allMaps.length - 1] === MWGTM_M);
+    const index = getActiveMapIndex();
     console.log("Active map index:", index); // -1 if not found
 
-    if (MWGTM_SVC && allMaps[index]) {
+    const activeMap = getActiveMap();
+    if (!activeMap) console.log("No map found to toggle coverage");
+
+    if (MWGTM_SVC && activeMap) {
         if (enabled) {
-            allMaps[index].overlayMapTypes.insertAt(0, MWGTM_SVC);
-            allMaps[index].overlayMapTypes.insertAt(1, MWGTM_LABELS);
+            activeMap.overlayMapTypes.insertAt(0, MWGTM_SVC);
+            activeMap.overlayMapTypes.insertAt(1, MWGTM_LABELS);
         } else {
-            allMaps[index].overlayMapTypes.removeAt(1);
-            allMaps[index].overlayMapTypes.removeAt(0);
+            activeMap.overlayMapTypes.removeAt(1);
+            activeMap.overlayMapTypes.removeAt(0);
         }
     }
-
-    // } catch (e) {
-    //     console.error('setMapTypeId failed:', e);
-    // }
 
     const coverageButtons = document.querySelectorAll('.btm-coverage-button');
 
     for (const cb of coverageButtons) {
         cb.textContent = enabled ? 'COVERAGE VISIBLE - [ B ]' : 'COVERAGE HIDDEN - [ B ]';
     }
-
-    // if (MWGTM_SVC && MWGTM_M) {
-    //     if (enabled) {
-    //         MWGTM_M.overlayMapTypes.insertAt(0, MWGTM_SVC);
-    //         MWGTM_M.overlayMapTypes.insertAt(1, MWGTM_LABELS);
-    //     } else {
-    //         MWGTM_M.overlayMapTypes.removeAt(1);
-    //         MWGTM_M.overlayMapTypes.removeAt(0);
-    //     }
-    // }
 
     MWGTM_STATE.coverageEnabled = enabled;
     saveState();
@@ -1129,21 +1094,21 @@ function removableButtons(mode) {
     return locationButtons;
 }
 
-function waitForNextDataUpdate(currentData) {
-    return new Promise((resolve) => {
-        const script = document.querySelector('script#__NEXT_DATA__');
+// function waitForNextDataUpdate(currentData) {
+//     return new Promise((resolve) => {
+//         const script = document.querySelector('script#__NEXT_DATA__');
 
-        const observer = new MutationObserver(() => {
-            const fresh = JSON.parse(script.textContent);
-            if (fresh !== currentData) {
-                observer.disconnect();
-                resolve(fresh);
-            }
-        });
+//         const observer = new MutationObserver(() => {
+//             const fresh = JSON.parse(script.textContent);
+//             if (fresh !== currentData) {
+//                 observer.disconnect();
+//                 resolve(fresh);
+//             }
+//         });
 
-        observer.observe(script, { characterData: true, subtree: true });
-    });
-}
+//         observer.observe(script, { characterData: true, subtree: true });
+//     });
+// }
 
 async function getFreshNextData() {
     const response = await fetch(window.location.href);
@@ -1158,7 +1123,14 @@ async function getDuelData() {
     const data = await getFreshNextData();
     console.log("Duel data:");
     console.log(data);
-    return { game:data.props.pageProps.game, userID:data.props.accountProps.account.user.userId };
+    return { game: data.props.pageProps.game, userID: data.props.accountProps.account.user.userId };
+}
+
+async function getChallengeData() {
+    const data = await getFreshNextData();
+    console.log("Challenge data:");
+    console.log(data);
+    return data.props.pageProps.preselectedGame;
 }
 
 GeoGuessrEventFramework.init().then(GEF => {
@@ -1186,11 +1158,10 @@ GeoGuessrEventFramework.init().then(GEF => {
         } else if ((e.detail.url.startsWith('/results')) || (e.detail.url.startsWith('/duels'))) {
             console.log('Looking at results:', e.detail.url);
             if (e.detail.url.startsWith('/duels')) {
-                //TODO: Wait for some element here to make sure all is loaded
-
                 await updateLOCATIONandGUESSforDuelResults();
+            } else if (e.detail.url.startsWith('/results')) {
+                await updateLOCATIONandGUESSforChallengeResults();
             }
-            console.log("Map: " + MWGTM_M);
             MWGTM_STATE.PLAYING_A_SEED = false;
             MWGTM_STATE.LOOKING_AT_RESULTS = true;
         } else {
@@ -1201,30 +1172,30 @@ GeoGuessrEventFramework.init().then(GEF => {
         saveState();
     });
 
-    document.addEventListener('click', function (e) {
-        const text = e.target.textContent.trim();
-        if ((text.startsWith('Round ')) || (text === "Total")) {
-            const threeOps = document.getElementById('btm-removable-buttons-challenge');
-            if (!threeOps) return;
-            if (text === 'Total') {
-                ROUND_NUMBER = 0;
-                threeOps.style.display = 'none';
-            } else {
-                const match = text.match(/Round (\d+)/);
-                if (match) {
-                    const rn = parseInt(match[1]);
-                    if (ROUND_NUMBER == rn) {
-                        ROUND_NUMBER = 0;
-                        threeOps.style.display = 'none';
-                    } else {
-                        ROUND_NUMBER = parseInt(match[1]);
-                        threeOps.style.display = 'contents';
-                    }
-                }
-            }
-            console.log('ROUND_NUMBER:', ROUND_NUMBER);
-        }
-    });
+    // document.addEventListener('click', function (e) {
+    //     const text = e.target.textContent.trim();
+    //     if ((text.startsWith('Round ')) || (text === "Total")) {
+    //         const threeOps = document.getElementById('btm-removable-buttons-challenge');
+    //         if (!threeOps) return;
+    //         if (text === 'Total') {
+    //             ROUND_NUMBER = 0;
+    //             threeOps.style.display = 'none';
+    //         } else {
+    //             const match = text.match(/Round (\d+)/);
+    //             if (match) {
+    //                 const rn = parseInt(match[1]);
+    //                 if (ROUND_NUMBER == rn) {
+    //                     ROUND_NUMBER = 0;
+    //                     threeOps.style.display = 'none';
+    //                 } else {
+    //                     ROUND_NUMBER = parseInt(match[1]);
+    //                     threeOps.style.display = 'contents';
+    //                 }
+    //             }
+    //         }
+    //         console.log('ROUND_NUMBER:', ROUND_NUMBER);
+    //     }
+    // });
 
     GEF.events.addEventListener('game_start', (state) => {
         console.log("BTM:Game started");
@@ -1357,6 +1328,45 @@ async function updateLOCATIONandGUESSforDuelResults() {
     }
 }
 
+async function updateLOCATIONandGUESSforChallengeResults() {
+    let game = await getChallengeData();
+    console.log(game);
+    await waitForElement('div[class*="coordinate-results_clickableColumn__"]');
+    const roundColumns = document.querySelectorAll((`div[class*="coordinate-results_clickableColumn__"]`));
+    console.log(roundColumns);
+    for (const rc of roundColumns) {
+        rc.addEventListener('click', () => {
+            const threeOps = document.getElementById('btm-removable-buttons-challenge');
+            if (!threeOps) return;
+            if (rc.textContent === 'Total') {
+                ROUND_NUMBER = 0;
+                threeOps.style.display = 'none';
+            } else {
+                const match = rc.textContent.match(/Round (\d+)/);
+                if (match) {
+                    const rn = parseInt(match[1]);
+                    if (ROUND_NUMBER == rn) {
+                        ROUND_NUMBER = 0;
+                        threeOps.style.display = 'none';
+                    } else {
+                        console.log(game.rounds);
+                        ROUND_NUMBER = parseInt(match[1]);
+                        const locc = game.rounds[ROUND_NUMBER - 1];
+                        if (locc) LOCATION = locc;
+                        else console.log("Hmm");
+                        const guess = game.player.guesses[ROUND_NUMBER - 1];
+                        if (guess) GUESS = guess;
+                        else console.log("Hmm2");
+                        
+                        threeOps.style.display = 'contents';
+                    }
+                }
+            }
+            console.log('ROUND_NUMBER:', ROUND_NUMBER);
+        });
+    }
+}
+
 // Script injection, extracted from unityscript extracted from extenssr:
 // https://gitlab.com/nonreviad/extenssr/-/blob/main/src/injected_scripts/maps_api_injecter.ts
 
@@ -1416,7 +1426,14 @@ function showSV(latlng) {
 }
 
 function getActiveMap() {
-    const index = allMaps.findIndex(map => {
+    return allMapObjects.find(map => {
+        const container = map.getDiv();
+        return container && container.isConnected && container.offsetParent !== null;
+    });
+}
+
+function getActiveMapIndex() {
+    const index = allMapObjects.findIndex(map => {
         const container = map.getDiv();
         return container && container.isConnected && container.offsetParent !== null;
     });
@@ -1448,9 +1465,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         google.maps.Map = class extends google.maps.Map {
             constructor(...args) {
                 super(...args);
-                MWGTM_M = this;
-                allMaps.push(this);
-                console.log("Map object updated, total maps:", allMaps.length);
+                //MWGTM_M = this;
+                allMapObjects.push(this);
+                console.log("Map object updated, total maps:", allMapObjects.length);
 
                 MWGTM_SVC = new google.maps.ImageMapType({
                     getTileUrl: (point, zoom) => `https://www.google.com/maps/vt?pb=!1m7!8m6!1m3!1i${zoom}!2i${point.x}!3i${point.y}!2i9!3x1!2m8!1e2!2ssvv!4m2!1scc!2s*211m3*211e2*212b1*213e2*212b1*214b1!4m2!1ssvl!2s*211b0*212b1!3m8!2sen!3sus!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m4!1e0!8m2!1e1!1e1!6m6!1e12!2i2!11e0!39b0!44e0!50e`,
@@ -1464,12 +1481,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     { featureType: 'all', elementType: 'labels', stylers: [{ visibility: 'on' }] },
                 ], { name: 'labels' });;
 
-                //                 MWGTM_M.addListener('idle', () => {
+                //                 this.addListener('idle', () => {
                 //                     toggleTerrain(MWGTM_STATE.terrainEnabled);
                 //                     toggleCoverage(MWGTM_STATE.coverageEnabled);
                 //                 });
 
-                MWGTM_M.addListener('click', (event) => {
+                this.addListener('click', (event) => {
                     console.log("Click detected");
                     console.log("PLAYING A SEED = " + MWGTM_STATE.PLAYING_A_SEED);
                     console.log("LOOKING AT RESULTS = " + MWGTM_STATE.LOOKING_AT_RESULTS);
