@@ -1405,7 +1405,35 @@ function injecter(overrider) {
     }).observe(document.documentElement, { childList: true, subtree: true });
 }
 
-function showSV(latlng) {
+function showNoStreetViewMessage(e) {
+    const existing = document.getElementById('btm-no-sv-message');
+    if (existing) existing.remove();
+
+    const el = document.createElement('div');
+    el.id = 'btm-no-sv-message';
+    el.innerHTML = 'No streetview<br>within 2km';
+    el.style.cssText = `
+        position: fixed;
+        right: 120px;
+        top: 350px;
+        background: rgba(0,0,0,0.75);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        font-weight: bold;
+        z-index: 9999;
+    `;
+    if (e) {
+        el.style.left = (e.clientX + 40) + 'px';
+        el.style.right = '';
+        el.style.top = (e.clientY - 40) + 'px';
+    }
+    document.body.appendChild(el);
+
+    setTimeout(() => el.remove(), 1500);
+}
+
+function showSV(latlng, event = null) {
     const streetViewService = new google.maps.StreetViewService();
 
     streetViewService.getPanorama(
@@ -1420,7 +1448,10 @@ function showSV(latlng) {
                 console.log(myLoc);
                 const link = googleMapsLink(myLoc);
                 GM_openInTab(link, false);
-            } else console.log("No SV");
+            } else {
+                console.log("No SV");
+                showNoStreetViewMessage(event);
+            }
         }
     );
 }
@@ -1496,7 +1527,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         console.log("Click off the flag image");
                         let not_in_round = ((MWGTM_STATE.PLAYING_A_SEED) && (!MWGTM_STATE.ROUND_ACTIVE)) || (MWGTM_STATE.LOOKING_AT_RESULTS);
                         if (not_in_round && MWGTM_STATE.coverageEnabled) {
-                            showSV({ lat: event.latLng.lat(), lng: event.latLng.lng() });
+                            showSV({ lat: event.latLng.lat(), lng: event.latLng.lng() }, event.domEvent);
                         }
                     }
                 });
