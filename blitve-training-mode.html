@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>blitve's training mode</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0b1118;
+      --surface: #131c27;
+      --border: #1e2d3d;
+      --green: #26a65b;
+      --green-hover: #1e8a4a;
+      --blue: #4a9eda;
+      --text: #e0e8f0;
+      --muted: #7a8fa3;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+    }
+
+    .back {
+      align-self: flex-start;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto 40px;
+    }
+
+    .back a {
+      font-size: 0.88rem;
+      color: var(--muted);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+
+    .back a:hover { color: var(--text); }
+
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .icon { font-size: 48px; margin-bottom: 16px; display: block; }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+
+    .install-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--green);
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 600;
+      padding: 15px 34px;
+      border-radius: 8px;
+      transition: background 0.2s, transform 0.1s;
+      margin-bottom: 12px;
+    }
+
+    .install-btn:hover { background: var(--green-hover); transform: translateY(-1px); }
+    .install-btn:active { transform: translateY(0); }
+
+    .install-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 60px;
+    }
+
+    .install-note a { color: var(--blue); text-decoration: none; }
+    .install-note a:hover { text-decoration: underline; }
+
+    section {
+      max-width: 800px;
+      width: 100%;
+      margin-bottom: 60px;
+    }
+
+    section h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .feature {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px;
+    }
+
+    .feature-icon { font-size: 26px; margin-bottom: 10px; }
+    .feature h3 { font-size: 0.95rem; font-weight: 600; color: #fff; margin-bottom: 8px; }
+    .feature p { font-size: 0.86rem; color: var(--muted); line-height: 1.55; }
+
+    .feature.more {
+      border-style: dashed;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      gap: 8px;
+    }
+
+    .feature.more .feature-icon { margin-bottom: 0; }
+
+    .steps { display: flex; flex-direction: column; gap: 18px; }
+
+    .step { display: flex; gap: 16px; align-items: flex-start; }
+
+    .step-num {
+      background: var(--green);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-text { font-size: 0.93rem; color: #c0cdd8; line-height: 1.55; padding-top: 3px; }
+    .step-text a { color: var(--blue); text-decoration: none; }
+    .step-text a:hover { text-decoration: underline; }
+
+    footer {
+      margin-top: 20px;
+      font-size: 0.82rem;
+      color: #3a4a5a;
+    }
+
+    footer a { color: var(--blue); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <div class="back">
+    <a href="index.html">← All scripts</a>
+  </div>
+
+  <header>
+    <span class="icon">🗺️</span>
+    <h1>blitve's training mode</h1>
+    <p class="tagline">Enhanced post-round analysis for serious GeoGuessr players</p>
+
+    <a class="install-btn" href="https://github.com/oumpaxikis/geo-scripts/blob/main/blitve-training-mode.user.js">
+      ⬇️ Install Script
+    </a>
+    <p class="install-note">
+      Requires <a href="https://www.tampermonkey.net/" target="_blank">TamperMonkey</a> browser extension
+    </p>
+  </header>
+
+  <section>
+    <h2>Features</h2>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🛰️</div>
+        <h3>Satellite Mode</h3>
+        <p>Switch to satellite view when reviewing round results to get a better sense of the terrain and surroundings.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🖱️</div>
+        <h3>Clickable Coverage</h3>
+        <p>Click on Street View coverage directly from the results map to jump straight to any location.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🏆</div>
+        <h3>Challenges & Duels</h3>
+        <p>Works seamlessly on both challenge and duel result pages.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔇</div>
+        <h3>Competition Safe</h3>
+        <p>Nothing is shown in-round for timed challenges, so you can safely leave the script running during competitions.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">💾</div>
+        <h3>Map Making App Integration</h3>
+        <p>For untimed seeds, save locations to the Map Making App directly in-round without leaving the game.</p>
+      </div>
+      <div class="feature more">
+        <div class="feature-icon">✨</div>
+        <p>And more...</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>How to Install</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">Install the <a href="https://www.tampermonkey.net/" target="_blank">TamperMonkey</a> extension for your browser if you haven't already.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Click the <strong>Install Script</strong> button above. TamperMonkey will open and ask you to confirm the installation.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">Play a game of GeoGuessr. After each round, the enhanced results view will appear automatically.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <a href="https://github.com/oumpaxikis/geo-scripts" target="_blank">View on GitHub</a>
+  </footer>
+
+</body>
+</html>

@@ -3,240 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download CSV</title>
+  <title>GeoGuessr Scripts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0b1118;
+      --surface: #131c27;
+      --border: #1e2d3d;
+      --green: #26a65b;
+      --green-hover: #1e8a4a;
+      --blue: #4a9eda;
+      --text: #e0e8f0;
+      --muted: #7a8fa3;
+    }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0f1923;
-      color: #e0e0e0;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 60px 20px;
+      padding: 80px 20px 60px;
     }
 
-    .logo {
-      font-size: 48px;
-      margin-bottom: 16px;
+    header {
+      text-align: center;
+      margin-bottom: 70px;
     }
+
+    .globe { font-size: 52px; margin-bottom: 18px; display: block; }
 
     h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
+      font-family: 'Syne', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 800;
       color: #fff;
-      margin-bottom: 8px;
-    }
-
-    .tagline {
-      font-size: 1.05rem;
-      color: #8a9bb0;
-      margin-bottom: 40px;
-    }
-
-    .install-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: #26a65b;
-      color: #fff;
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-weight: 600;
-      padding: 16px 36px;
-      border-radius: 8px;
-      transition: background 0.2s, transform 0.1s;
+      letter-spacing: -0.5px;
       margin-bottom: 12px;
     }
 
-    .install-btn:hover { background: #1e8a4a; transform: translateY(-1px); }
-    .install-btn:active { transform: translateY(0); }
-
-    .install-note {
-      font-size: 0.85rem;
-      color: #8a9bb0;
-      margin-bottom: 60px;
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
     }
 
-    .install-note a { color: #4a9eda; text-decoration: none; }
-    .install-note a:hover { text-decoration: underline; }
-
-    .cards {
+    .scripts {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      max-width: 800px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      max-width: 780px;
       width: 100%;
-      margin-bottom: 60px;
     }
 
-    .card {
-      background: #1a2634;
-      border: 1px solid #2a3a4a;
-      border-radius: 10px;
-      padding: 24px;
-    }
-
-    .card-icon { font-size: 28px; margin-bottom: 12px; }
-    .card h3 { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 8px; }
-    .card p { font-size: 0.88rem; color: #8a9bb0; line-height: 1.5; }
-
-    .steps {
-      max-width: 600px;
-      width: 100%;
-      margin-bottom: 60px;
-    }
-
-    .steps h2 {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .step {
+    .script-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px;
+      text-decoration: none;
+      color: inherit;
       display: flex;
-      gap: 16px;
-      align-items: flex-start;
-      margin-bottom: 20px;
+      flex-direction: column;
+      gap: 14px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
     }
 
-    .step-num {
-      background: #26a65b;
-      color: #fff;
+    .script-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--green);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+
+    .script-card:hover {
+      border-color: #2e4a60;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .script-card:hover::before { transform: scaleX(1); }
+
+    .card-icon { font-size: 32px; }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.25rem;
       font-weight: 700;
-      font-size: 0.9rem;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .step-text { font-size: 0.95rem; color: #c0cdd8; line-height: 1.5; padding-top: 4px; }
-    .step-text a { color: #4a9eda; text-decoration: none; }
-    .step-text a:hover { text-decoration: underline; }
-
-    .csv-table {
-      max-width: 700px;
-      width: 100%;
-      margin-bottom: 60px;
-    }
-
-    .csv-table h2 {
-      font-size: 1.3rem;
-      font-weight: 600;
       color: #fff;
-      margin-bottom: 20px;
-      text-align: center;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--blue);
+      margin-top: 4px;
     }
 
-    th {
-      background: #1a2634;
-      color: #4a9eda;
-      text-align: left;
-      padding: 10px 14px;
-      border-bottom: 2px solid #2a3a4a;
-    }
-
-    td {
-      padding: 9px 14px;
-      border-bottom: 1px solid #1a2634;
-      color: #c0cdd8;
-    }
-
-    tr:nth-child(even) td { background: #141e28; }
+    .card-link::after { content: '→'; transition: transform 0.2s; }
+    .script-card:hover .card-link::after { transform: translateX(4px); }
 
     footer {
+      margin-top: 80px;
       font-size: 0.82rem;
-      color: #4a5a6a;
+      color: #3a4a5a;
     }
 
-    footer a { color: #4a9eda; text-decoration: none; }
+    footer a { color: var(--blue); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
-  <div class="logo">🌍</div>
-  <h1>Download CSV of Geoguessr Challenge Results</h1>
-  <p class="tagline">Export challenge results to CSV with one click</p>
+  <header>
+    <span class="globe">🌍</span>
+    <h1>GeoGuessr Scripts</h1>
+    <p class="subtitle">Tampermonkey scripts to enhance your GeoGuessr experience</p>
+  </header>
 
-  <a class="install-btn"
-href="https://raw.githubusercontent.com/oumpaxikis/geo-scripts/main/download-csv-challenge-results.user.js">
-    ⬇️ Install Script
-  </a>
-  <p class="install-note">
-    Requires <a href="https://www.tampermonkey.net/" target="_blank">TamperMonkey</a> browser extension
-  </p>
+  <div class="scripts">
+    <a class="script-card" href="download-csv.html">
+      <div class="card-icon">📥</div>
+      <div class="card-title">Download CSV of Challenge Results</div>
+      <div class="card-desc">Export challenge results to a clean CSV with scores, distances, times, and steps for every player and round — with one click.</div>
+      <span class="card-link">Learn more</span>
+    </a>
 
-  <div class="cards">
-    <div class="card">
-      <div class="card-icon">🖱️</div>
-      <h3>One Click Export</h3>
-      <p>A button appears on any GeoGuessr challenge results page. Click it to instantly download the data.</p>
-    </div>
-    <div class="card">
-      <div class="card-icon">📄</div>
-      <h3>CSV Format</h3>
-      <p>Downloads a clean CSV with scores, distances, times, and steps for every player and round.</p>
-    </div>
-    <div class="card">
-      <div class="card-icon">🔒</div>
-      <h3>No Login Required</h3>
-      <p>Uses your existing GeoGuessr session — no extra accounts or API keys needed.</p>
-    </div>
-  </div>
-
-  <div class="steps">
-    <h2>How to Install</h2>
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-text">Install the <a href="https://www.tampermonkey.net/" target="_blank">TamperMonkey</a> extension for your browser if you haven't already.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-text">Click the <strong>Install Script</strong> button above. TamperMonkey will open and ask you to confirm.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-text">Navigate to any GeoGuessr challenge results page</div>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-text">Click the <strong>Download CSV</strong> button in the bottom-right corner of the page.</div>
-    </div>
-  </div>
-
-  <div class="csv-table">
-    <h2>CSV Format</h2>
-    <table>
-      <tr><th>Column</th><th>Description</th></tr>
-      <tr><td>Nick</td><td>Player username</td></tr>
-      <tr><td>Total Score</td><td>Overall score in points</td></tr>
-      <tr><td>Total Distance (m)</td><td>Total distance error in metres</td></tr>
-      <tr><td>Total Time (s)</td><td>Total time taken in seconds</td></tr>
-      <tr><td>Total Steps</td><td>Total steps taken</td></tr>
-      <tr><td>R1–R5 Score</td><td>Score for each round</td></tr>
-      <tr><td>R1–R5 Distance (m)</td><td>Distance error per round</td></tr>
-      <tr><td>R1–R5 Time (s)</td><td>Time taken per round</td></tr>
-      <tr><td>R1–R5 Steps</td><td>Steps taken per round</td></tr>
-    </table>
+    <a class="script-card" href="blitve-training-mode.html">
+      <div class="card-icon">🗺️</div>
+      <div class="card-title">blitve's training mode</div>
+      <div class="card-desc">Enhanced training with satellite mode, clickable coverage, challenge and duel support, and seamless Map Making App integration.</div>
+      <span class="card-link">Learn more</span>
+    </a>
   </div>
 
   <footer>
-    <a href="https://github.com/oumpaxikis/geo-scripts" target="_blank">View on GitHub</a>
+    <a href="https://github.com/oumpaxikis/geo-scripts" target="_blank">View all scripts on GitHub</a>
   </footer>
 
 </body>
