@@ -626,10 +626,8 @@ function toggleMapType(mapType) {
     const allowed = (MWGTM_STATE.LOOKING_AT_RESULTS || (MWGTM_STATE.PLAYING_A_SEED && (!MWGTM_STATE.ROUND_ACTIVE)));
     if (!allowed) return;
 
-    // 5 lines can go
-    //console.log("Current MWGTM_M:", MWGTM_M);
+    // 3 lines can go
     console.log("All maps:", allMapObjects);
-    //console.log("Are they the same?", allMaps[allMaps.length - 1] === MWGTM_M);
     const index = getActiveMapIndex();
     console.log("Active map index:", index); // -1 if not found
 
@@ -715,10 +713,8 @@ function toggleCoverage(enabled) {
     // Do not do anything if trying to enable coverage when not allowed
     if (!coverage_allowed && enabled) return;
 
-    // 5 lines can go
-    //console.log("Current MWGTM_M:", MWGTM_M);
+    // 3 lines can go
     console.log("All maps:", allMapObjects);
-    //console.log("Are they the same?", allMaps[allMaps.length - 1] === MWGTM_M);
     const index = getActiveMapIndex();
     console.log("Active map index:", index); // -1 if not found
 
