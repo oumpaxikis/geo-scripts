@@ -24,7 +24,7 @@ Create one here: https://map-making.app/keys
 Make sure not to share this key with anybody or show it publically as it will allow anybody to edit your maps.
 
 Replace `PASTE_YOUR_KEY_HERE` with your generated API key (make sure not to delete the quotes surrounding the key) */
-const MAP_MAKING_API_KEY = "a23929df-2bb3-4b93-b230-cddd4b912ae1";
+const MAP_MAKING_API_KEY = "PASTE_YOUR_KEY_HERE";
 
 
 
@@ -634,7 +634,6 @@ function toggleMapType(mapType) {
     const activeMap = getActiveMap();
 
     if (activeMap) {
-        //console.log(activeMap);
         activeMap.setMapTypeId(mapType);
         // MWGTM_M.addListener('idle', () => {
         //     MWGTM_M.setMapTypeId(mapType);
