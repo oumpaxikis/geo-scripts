@@ -139,7 +139,7 @@ body.mwgtm-compass-hidden .mwgtm-compass {
 
 .btm-main-div {
 	position: absolute;
-	top: 1rem;
+	top: 5rem;
 	right: 1rem;
 	z-index: 9;
 	display: flex;
@@ -624,23 +624,25 @@ function toggleMapType(mapType) {
 
     // Do not do anything if trying to change map type when not allowed
     const allowed = (MWGTM_STATE.LOOKING_AT_RESULTS || (MWGTM_STATE.PLAYING_A_SEED && (!MWGTM_STATE.ROUND_ACTIVE)));
-    if (!allowed) return;
+    if (!allowed && !mapType === 'roadmap') return;
 
     // 3 lines can go
     console.log("All maps:", allMapObjects);
-    const index = getActiveMapIndex();
-    console.log("Active map index:", index); // -1 if not found
+    // const index = getActiveMapIndex();
+    // console.log("Active map index:", index); // -1 if not found
 
-    const activeMap = getActiveMap();
+    // const activeMap = getActiveMap();
 
-    if (activeMap) {
-        activeMap.setMapTypeId(mapType);
-        // MWGTM_M.addListener('idle', () => {
-        //     MWGTM_M.setMapTypeId(mapType);
-        // });
-    } else {
-        console.log("No map found to toggle type");
-    }
+    // if (activeMap) {
+    //     activeMap.setMapTypeId(mapType);
+    //     // MWGTM_M.addListener('idle', () => {
+    //     //     MWGTM_M.setMapTypeId(mapType);
+    //     // });
+    // } else {
+    //     console.log("No map found to toggle type");
+    // }
+    if (allMapObjects.length == 0) console.log("No map found to toggle type");
+    allMapObjects.forEach(map => map.setMapTypeId(mapType));
 
     if (mapType == 'roadmap') {
         MWGTM_STATE.satelliteEnabled = false;
@@ -714,20 +716,33 @@ function toggleCoverage(enabled) {
 
     // 3 lines can go
     console.log("All maps:", allMapObjects);
-    const index = getActiveMapIndex();
-    console.log("Active map index:", index); // -1 if not found
+    // const index = getActiveMapIndex();
+    // console.log("Active map index:", index); // -1 if not found
 
-    const activeMap = getActiveMap();
-    if (!activeMap) console.log("No map found to toggle coverage");
+    // const activeMap = getActiveMap();
+    // if (!activeMap) console.log("No map found to toggle coverage");
 
-    if (MWGTM_SVC && activeMap) {
-        if (enabled) {
-            activeMap.overlayMapTypes.insertAt(0, MWGTM_SVC);
-            activeMap.overlayMapTypes.insertAt(1, MWGTM_LABELS);
-        } else {
-            activeMap.overlayMapTypes.removeAt(1);
-            activeMap.overlayMapTypes.removeAt(0);
-        }
+    // if (MWGTM_SVC && activeMap) {
+    //     if (enabled) {
+    //         activeMap.overlayMapTypes.insertAt(0, MWGTM_SVC);
+    //         activeMap.overlayMapTypes.insertAt(1, MWGTM_LABELS);
+    //     } else {
+    //         activeMap.overlayMapTypes.removeAt(1);
+    //         activeMap.overlayMapTypes.removeAt(0);
+    //     }
+    // }
+
+    if (allMapObjects.length == 0) console.log("No map found to toggle type");
+    if (MWGTM_SVC) {
+        allMapObjects.forEach(map => {
+            if (enabled) {
+                map.overlayMapTypes.insertAt(0, MWGTM_SVC);
+                map.overlayMapTypes.insertAt(1, MWGTM_LABELS);
+            } else {
+                map.overlayMapTypes.removeAt(1);
+                map.overlayMapTypes.removeAt(0);
+            }
+        });
     }
 
     const coverageButtons = document.querySelectorAll('.btm-coverage-button');
@@ -1161,6 +1176,9 @@ GeoGuessrEventFramework.init().then(GEF => {
             MWGTM_STATE.LOOKING_AT_RESULTS = true;
         } else {
             console.log('Other route:', e.detail.url);
+            toggleMapType('roadmap');
+            toggleCoverage(false);
+            saveState();
             MWGTM_STATE.PLAYING_A_SEED = false;
             MWGTM_STATE.LOOKING_AT_RESULTS = false;
         }
