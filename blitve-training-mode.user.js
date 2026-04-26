@@ -294,7 +294,7 @@ body.mwgtm-compass-hidden .mwgtm-compass {
     font-variant-numeric: tabular-nums;
 }
 
-#mwgtm-timer-summary {
+#btm-round-time {
     background: rgba(0, 0, 0, 0.5);
     padding: 6px 10px;
     border-radius: 5px;
@@ -976,7 +976,7 @@ function roundTime() {
     const s = String(MWGTM_STATE.timerFinal % 60).padStart(2, '0');
     const roundTimeDiv = document.createElement('div');
     roundTimeDiv.innerHTML = `
-    <div id="mwgtm-timer-summary">
+    <div id="btm-round-time">
         <div style="font-size:10px; opacity:0.7; margin-bottom:2px;">ROUND TIME ${m}:${s}
         </div>
     </div>
@@ -1238,6 +1238,8 @@ GeoGuessrEventFramework.init().then(GEF => {
             const threeButtons = await waitForElement('[id="btm-removable-buttons-seed"]');
             console.log("threeButtons: " + threeButtons)
             if (threeButtons) threeButtons.style.display = 'none';
+            const rTimer = await waitForElement('[id="btm-round-time"]');
+            if (rTimer) rTimer.style.display = 'none';
         });
     });
 });
