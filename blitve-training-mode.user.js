@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         blitve's training mode
 // @description  Extension to Geoguesser Training Mode by miraclewhips. Adds saving to map in-round, clickable streetview, and more.
-// @version      1.0
+// @version      1.1
 // @author       blitve
 // @match        *://*.geoguessr.com/*
 // @run-at       document-start
@@ -1273,24 +1273,46 @@ if (document.readyState === 'loading') {
     observer.observe(document.querySelector('#__next'), { subtree: true, childList: true });
 }
 
+const seenMarkers = new WeakSet();
 
-// Flags update isHoveringFlag variable
 const flagObserver = new MutationObserver(() => {
     const markers = document.querySelectorAll('[data-qa="correct-location-marker"]');
 
-    if (markers.length > 0) {
-        markers.forEach(marker => {
-            marker.addEventListener('mouseenter', () => {
-                isHoveringFlag = true;
-            });
-            marker.addEventListener('mouseleave', () => {
-                isHoveringFlag = false;
-            });
-        });
+    markers.forEach(marker => {
+        if (seenMarkers.has(marker)) return;
+        seenMarkers.add(marker);
 
-        flagObserver.disconnect();
-    }
+        marker.addEventListener('mouseenter', () => {
+            isHoveringFlag = true;
+            //console.log("On flag");
+        });
+        marker.addEventListener('mouseleave', () => {
+            isHoveringFlag = false;
+            //console.log("Off flag");
+        });
+    });
 });
+
+// Flags update isHoveringFlag variable
+// const flagObserver = new MutationObserver(() => {
+//     console.log("flag observer");
+//     const markers = document.querySelectorAll('[data-qa="correct-location-marker"]');
+
+//     if (markers.length > 0) {
+//         markers.forEach(marker => {
+//             marker.addEventListener('mouseenter', () => {
+//                 isHoveringFlag = true;
+//                 console.log("On flag");
+//             });
+//             marker.addEventListener('mouseleave', () => {
+//                 isHoveringFlag = false;
+//                 console.log("Off flag");
+//             });
+//         });
+
+//         //flagObserver.disconnect();
+//     }
+// });
 
 flagObserver.observe(document.body, { childList: true, subtree: true });
 
