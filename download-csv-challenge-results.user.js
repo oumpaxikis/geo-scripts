@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Download CSV of GeoGuessr Challenge Results
 // @description  Download CSV of GeoGuessr Challenge Results
-// @version      1.0
+// @version      1.1
 // @author       blitve
 // @match        https://www.geoguessr.com/*
 // @run-at       document-start
@@ -68,7 +68,7 @@ function updateButton() {
                         // Base columns
                         const baseColumns = [
                             player.nick,
-                            player.totalScore.amount,
+                            player.totalScoreInPoints,
                             player.totalDistanceInMeters,
                             player.totalTime,
                             player.totalStepsCount
